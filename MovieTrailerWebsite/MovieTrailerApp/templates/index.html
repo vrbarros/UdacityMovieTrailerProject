@@ -1,0 +1,68 @@
+<!-- MovieTrailerApp/templates/index.html -->
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load index_tags %}
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">My Favorite Movie Library</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Favorite List</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/about/">About</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <h1>My Favorite Movies</h1>
+    <p>This favorite list is connected to your Favorite List in The Movie Database account. Remeber to change your credentials before to use.</p>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      {% get_movies as database %}
+      {% for movie in database %}
+      <div class="col-xs-6 col-md-4">
+        <div class="thumbnail">
+          <h3 class="text-center">{{ movie.original_title }}</h3>
+          <img src="{{ movie.poster_path }}" alt="{{ movie.original_title }}">
+          <div class="caption">
+            <p>{{ movie.overview }}</p>
+            <p>
+              {% for trailer in movie.trailers %}
+              <a href="{{ trailer.url }}" class="btn btn-primary" role="button" target="_blank">
+                {{ trailer.trailer_name }}</a><br />
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="row">
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
